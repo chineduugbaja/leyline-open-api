@@ -1,0 +1,6 @@
+Flask==2.3.2
+gunicorn==20.1.0
+prometheus_flask_exporter==0.20.3
+psycopg2-binary==2.9.1  # Assuming PostgreSQL
+Flask-Migrate==4.0.3
+Flask-SQLAlchemy==3.0.5

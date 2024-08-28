@@ -1,0 +1,60 @@
+name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: mydatabase
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      working-directory: leyline-open-api
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r leyline-open-api/requirements.txt
+
+    - name: Run tests
+      working-directory: leyline-open-api
+      run: |
+        pytest --maxfail=1 --disable-warnings 
+
+    - name: Build Docker image
+      working-directory: leyline-open-api
+      run: |
+        docker build -t leyline-open-api:latest .
+
+    - name: Build Helm chart
+      run: |
+        helm lint ./helm
+
+    # - name: Push Docker image to registry
+    #   env:
+    #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    #   run: |
+    #     echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    #     docker tag leyline-open-api:latest leyline-open-api:${{ github.sha }}
+    #     docker push leyline-open-api:${{ github.sha }}

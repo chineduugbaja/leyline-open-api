@@ -1,0 +1,30 @@
+replicaCount: 2
+
+image:
+  repository: leyline-open-api
+  tag: "0.1.0"
+
+service:
+  type: ClusterIP
+  port: 3000
+
+env:
+  DATABASE_URL: "postgresql://user:password@db:5432/mydatabase"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: myapp.local
+      paths:
+        - path: /
+          pathType: Prefix

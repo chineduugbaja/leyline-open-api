@@ -1,0 +1,167 @@
+basePath: /
+definitions:
+  handlers.HealthStatus:
+    properties:
+      status:
+        type: string
+    type: object
+  handlers.Status:
+    properties:
+      date:
+        type: integer
+      kubernetes:
+        type: boolean
+      version:
+        type: string
+    type: object
+  handlers.ValidateIPRequest:
+    properties:
+      ip:
+        type: string
+    type: object
+  handlers.ValidateIPResponse:
+    properties:
+      status:
+        type: boolean
+    type: object
+  models.Address:
+    properties:
+      ip:
+        type: string
+      queryID:
+        type: integer
+    type: object
+  models.Query:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/models.Address'
+        type: array
+      client_ip:
+        type: string
+      created_time:
+        type: integer
+      domain:
+        type: string
+      queryID:
+        type: integer
+    type: object
+  utils.HTTPError:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Interview challenge
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: Show current status
+      operationId: query_status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Status'
+      summary: Show current status
+      tags:
+      - status
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Show health status
+      operationId: query_health
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.HealthStatus'
+      summary: Show health status
+      tags:
+      - health
+  /v1/history:
+    get:
+      consumes:
+      - application/json
+      description: List queries
+      operationId: queries_history
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Query'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+      summary: List queries
+      tags:
+      - history
+  /v1/tools/lookup:
+    get:
+      consumes:
+      - application/json
+      description: Lookup domain and return all IPv4 addresses
+      operationId: lookup_domain
+      parameters:
+      - description: Domain name
+        in: query
+        name: domain
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Query'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+      summary: Lookup domain
+      tags:
+      - tools
+  /v1/tools/validate:
+    post:
+      consumes:
+      - application/json
+      description: Simple IP validation
+      operationId: validate_ip
+      parameters:
+      - description: IP to validate
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ValidateIPRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ValidateIPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+      summary: Simple IP validation
+      tags:
+      - tools
+swagger: "2.0"
