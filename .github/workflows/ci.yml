@@ -33,6 +33,7 @@ jobs:
     - name: Install dependencies
       working-directory: leyline-open-api
       run: |
+        ls -la leyline-open-api/
         python -m pip install --upgrade pip
         pip install -r leyline-open-api/requirements.txt
 
