@@ -39,10 +39,11 @@ jobs:
     - name: Run tests
       working-directory: ./leyline-open-api
       run: |
+        pip install pytest
         pytest --maxfail=1 --disable-warnings 
 
     - name: Build Docker image
-      working-directory: leyline-open-api
+      working-directory: ./leyline-open-api
       run: |
         docker build -t leyline-open-api:latest .
 
@@ -50,11 +51,3 @@ jobs:
       run: |
         helm lint ./helm
 
-    # - name: Push Docker image to registry
-    #   env:
-    #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-    #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    #   run: |
-    #     echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-    #     docker tag leyline-open-api:latest leyline-open-api:${{ github.sha }}
-    #     docker push leyline-open-api:${{ github.sha }}
