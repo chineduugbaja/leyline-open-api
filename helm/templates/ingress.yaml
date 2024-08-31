@@ -18,4 +18,9 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include
+                name: {{ include "leyline-open-api.fullname" $ }}
+                port:
+                  number: 3000
+          {{- end }}
+    {{- end }}
+{{- end }}

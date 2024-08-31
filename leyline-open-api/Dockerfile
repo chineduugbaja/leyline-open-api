@@ -36,4 +36,9 @@ EXPOSE 3000
 
 # Copy the entrypoint script into the container
 COPY entrypoint.sh /entrypoint.sh
-# RUN chmod 
+# RUN chmod 755 /entrypoint.sh
+
+# Use the entrypoint script to start the app
+ENTRYPOINT ["/entrypoint.sh"]
+
+# CMD ["gunicorn", "--workers=4", "--bind=0.0.0.0:3000", "--access-logfile=-", "--error-logfile=-", "--log-level=info", "app.main:app"]

@@ -26,4 +26,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "leyline-open-api.fullname" . }}-db-secret
-       
+                  key: DATABASE_URL
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+      restartPolicy: Always
