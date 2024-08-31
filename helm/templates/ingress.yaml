@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "leyline.fullname" . }}-ingress
+  name: {{ include "leyline-open-api.fullname" . }}-ingress
   labels:
-    {{- include "leyline.labels" . | nindent 4 }}
+    {{- include "leyline-open-api.labels" . | nindent 4 }}
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
@@ -18,9 +18,4 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "leyline.fullname" $ }}
-                port:
-                  number: 3000
-          {{- end }}
-    {{- end }}
-{{- end }}
+                name: {{ include

@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "leyline.fullname" . }}
+  name: {{ include "leyline-open-api.fullname" . }}
   labels:
-    {{- include "leyline.labels" . | nindent 4 }}
+    {{- include "leyline-open-api.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "leyline.name" . }}
+      app: {{ include "leyline-open-api.name" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ include "leyline.name" . }}
+        app: {{ include "leyline-open-api.name" . }}
         release: {{ .Release.Name }}
     spec:
       containers:
-        - name: {{ include "leyline.name" . }}
+        - name: {{ include "leyline-open-api.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 3000
@@ -25,13 +25,5 @@ spec:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "leyline.fullname" . }}-db-secret
-                  key: DATABASE_URL
-          resources:
-            limits:
-              cpu: {{ .Values.resources.limits.cpu }}
-              memory: {{ .Values.resources.limits.memory }}
-            requests:
-              cpu: {{ .Values.resources.requests.cpu }}
-              memory: {{ .Values.resources.requests.memory }}
-      restartPolicy: Always
+                  name: {{ include "leyline-open-api.fullname" . }}-db-secret
+       

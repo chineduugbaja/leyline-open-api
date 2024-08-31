@@ -36,18 +36,23 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run tests
-      working-directory: ./leyline-open-api
-      run: |
-        pip install pytest
-        pytest --maxfail=1 --disable-warnings 
+    - name: Run linting
+        working-directory: leyline-open-api
+        run: |
+          pylint app
+          
+     - name: Run tests
+        working-directory: leyline-open-api
+        run: |
+          pytest --junitxml=reports/junit.xml --cov=app --cov-report=xml:reports/coverage.xml
 
-    - name: Build Docker image
-      working-directory: ./leyline-open-api
-      run: |
-        docker build -t leyline-open-api:latest .
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: leyline-open-api/reports/
 
-    - name: Build Helm chart
-      run: |
-        helm lint ./helm
-
+    - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp

@@ -51,9 +51,4 @@ def init_routes(app):
                 "queryID": log.id,
                 "domain": log.domain,
                 "addresses": [{"ip": addr} for addr in log.result.split(",")],
-                "created_time": int(log.timestamp.timestamp())
-            } for log in query_logs
-        ]
-        return jsonify(response)
-
-    app.register_blueprint(api)
+                "created_time": int(log.timestamp.timestamp()
