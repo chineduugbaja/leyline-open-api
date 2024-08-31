@@ -37,9 +37,9 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run linting
-        working-directory: leyline-open-api
-        run: |
-          pylint app
+      working-directory: leyline-open-api
+      run: |
+        pylint app
           
      - name: Run tests
         working-directory: leyline-open-api
@@ -59,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-            
+
     - name: Build Docker image
       working-directory: ./leyline-open-api
       run: |
