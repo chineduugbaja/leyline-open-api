@@ -1,10 +1,12 @@
+import socket
+import socket
+import re
 from flask import Blueprint, request, jsonify
 from app.models import QueryLog
 from app.database import db
 from app.utils import validate_ipv4
-from sqlalchemy import desc
-import socket
-import re
+
+
 
 # Constants for status codes and messages
 HTTP_OK = 200
@@ -88,3 +90,4 @@ def init_routes(app):
         return jsonify(response), HTTP_OK
 
     app.register_blueprint(api)
+    

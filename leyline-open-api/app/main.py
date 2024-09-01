@@ -1,9 +1,11 @@
-from flask import Flask, jsonify
-from app.routes import init_routes
-from app.database import db, migrate
-from prometheus_flask_exporter import PrometheusMetrics
 import os
 from datetime import datetime
+from flask import Flask, jsonify
+from prometheus_flask_exporter import PrometheusMetrics
+from app.routes import init_routes
+from app.database import db, migrate
+
+
 
 app = Flask(__name__)
 app.config.from_object('app.config.Config')
