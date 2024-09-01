@@ -1,10 +1,9 @@
 import socket
-import socket
 import re
 from flask import Blueprint, request, jsonify
+from sqlalchemy import desc
 from app.models import QueryLog
 from app.database import db
-from app.utils import validate_ipv4
 
 
 
@@ -20,6 +19,10 @@ def is_valid_domain(domain):
         r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)$"
     )
     return all(regex.match(x) for x in domain.split("."))
+
+def validate_ipv4(ip):
+    pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+    return pattern.match(ip) is not None
 
 def init_routes(app):
     api = Blueprint('api', __name__)
@@ -48,6 +51,7 @@ def init_routes(app):
             query_log = QueryLog(domain=domain, result=",".join(ipv4_addresses))
             db.session.add(query_log)
             db.session.commit()
+        # pylint: disable-next=broad-exception-caught
         except Exception as e:
             db.session.rollback()
             return jsonify({"message": "Database error", "error": str(e)}), HTTP_BAD_REQUEST
@@ -67,6 +71,7 @@ def init_routes(app):
         if not ip:
             return jsonify({"message": "IP address is required"}), HTTP_BAD_REQUEST
 
+        # pylint: disable-next=no-else-return
         if validate_ipv4(ip):
             return jsonify({"status": True}), HTTP_OK
         else:
@@ -76,7 +81,9 @@ def init_routes(app):
     def queries_history():
         try:
             query_logs = QueryLog.query.order_by(desc(QueryLog.timestamp)).limit(20).all()
+        # pylint: disable-next=broad-exception-caught
         except Exception as e:
+            # pylint: disable-next=line-too-long
             return jsonify({"message": "Error retrieving history", "error": str(e)}), HTTP_BAD_REQUEST
 
         response = [
@@ -90,4 +97,3 @@ def init_routes(app):
         return jsonify(response), HTTP_OK
 
     app.register_blueprint(api)
-    

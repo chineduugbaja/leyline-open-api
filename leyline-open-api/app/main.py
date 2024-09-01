@@ -1,20 +1,9 @@
 import os
 from datetime import datetime
-from flask import Flask, jsonify
-from prometheus_flask_exporter import PrometheusMetrics
-from app.routes import init_routes
-from app.database import db, migrate
+from flask import jsonify
+from app.utils import create_app
 
-
-
-app = Flask(__name__)
-app.config.from_object('app.config.Config')
-
-db.init_app(app)
-migrate.init_app(app, db)
-metrics = PrometheusMetrics(app)
-
-init_routes(app)
+app = create_app()
 
 @app.route('/')
 def query_status():

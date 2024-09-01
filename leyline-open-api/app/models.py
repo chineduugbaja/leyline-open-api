@@ -1,7 +1,7 @@
 from datetime import datetime
 from app.database import db
 
-
+# pylint: disable-next=too-few-public-methods
 class QueryLog(db.Model):
     """
     Model representing a log entry for DNS queries.

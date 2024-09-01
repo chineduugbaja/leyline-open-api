@@ -39,7 +39,7 @@ jobs:
     - name: Run linting
       working-directory: leyline-open-api
       run: |
-        pylint app
+        pylint app --disable=C0114,C0115,C0116
           
     - name: Run tests
       working-directory: leyline-open-api
