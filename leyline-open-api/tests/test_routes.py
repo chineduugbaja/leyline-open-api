@@ -26,7 +26,7 @@ def test_root_endpoint(client):
 
 def test_lookup_domain(client):
     """Test the /v1/tools/lookup endpoint"""
-    response = client.get('/v1/tools/lookup?domain=example.com')
+    response = client.get('/v1/tools/lookup?domain=google.com')
     assert response.status_code == 200
     assert 'addresses' in response.json
 
