@@ -43,8 +43,10 @@ jobs:
           
     - name: Run tests
       working-directory: leyline-open-api
+      env:
+        DATABASE_URL: postgresql://user:password@postgres:5432/mydatabase # Ensure this is set in GitHub secrets
       run: |
-        pytest --maxfail=1 --disable-warnings  
+        pytest -v --maxfail=1 --disable-warnings  
 
     - name: Upload test results
       uses: actions/upload-artifact@v3
