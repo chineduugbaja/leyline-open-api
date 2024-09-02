@@ -44,7 +44,6 @@ jobs:
     - name: Run tests
       working-directory: leyline-open-api
       run: |
-        pip install pytest
         pytest --maxfail=1 --disable-warnings  
 
     - name: Upload test results
