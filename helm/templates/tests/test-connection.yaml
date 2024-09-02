@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "leyline.fullname" . }}-test-connection"
+  name: "{{ include "leyline-open-api.fullname" . }}-test-connection"
   labels:
-    {{- include "leyline.labels" . | nindent 4 }}
+    {{- include "leyline-open-api.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "leyline.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "leyline-open-api.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

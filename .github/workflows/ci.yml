@@ -44,7 +44,8 @@ jobs:
     - name: Run tests
       working-directory: leyline-open-api
       run: |
-        pytest --junitxml=reports/junit.xml --cov=app --cov-report=xml:reports/coverage.xml
+        pip install pytest
+        pytest --maxfail=1 --disable-warnings  
 
     - name: Upload test results
       uses: actions/upload-artifact@v3

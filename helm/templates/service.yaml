@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "leyline.fullname" . }}
+  name: {{ include "leyline-open-api.fullname" . }}
   labels:
-    {{- include "leyline.labels" . | nindent 4 }}
+    {{- include "leyline-open-api.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: 3000
   selector:
-    app: {{ include "leyline.name" . }}
+    app: {{ include "leyline-open-api.name" . }}
     release: {{ .Release.Name }}
