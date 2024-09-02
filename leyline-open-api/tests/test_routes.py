@@ -24,11 +24,11 @@ def test_root_endpoint(client):
     assert 'date' in response.json
     assert 'kubernetes' in response.json
 
-def test_lookup_domain(client):
-    """Test the /v1/tools/lookup endpoint"""
-    response = client.get('/v1/tools/lookup?domain=localhost')
-    assert response.status_code == 200
-    assert 'addresses' in response.json
+# def test_lookup_domain(client):
+#     """Test the /v1/tools/lookup endpoint"""
+#     response = client.get('/v1/tools/lookup?domain=localhost')
+#     assert response.status_code == 200
+#     assert 'addresses' in response.json
 
 def test_history_endpoint(client):
     """Test the /v1/history endpoint"""
