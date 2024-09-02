@@ -1,5 +1,5 @@
 from app.utils import create_app
-
+from app import routes
 # Create an instance of the Flask app
 app = create_app()
 

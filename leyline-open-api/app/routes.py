@@ -1,5 +1,7 @@
 import socket
 import re
+import os
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from sqlalchemy import desc
 from app.models import QueryLog
@@ -21,11 +23,28 @@ def is_valid_domain(domain):
     return all(regex.match(x) for x in domain.split("."))
 
 def validate_ipv4(ip):
-    pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+    """Validate if the IP address is a valid IPv4 address."""
+    pattern = re.compile(r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\."
+                         r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\."
+                         r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\."
+                         r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
     return pattern.match(ip) is not None
 
 def init_routes(app):
     api = Blueprint('api', __name__)
+
+    @app.route('/')
+    def query_status():
+        response = {
+            "version": "0.1.0",
+            "date": int(datetime.now().timestamp()),
+            "kubernetes": os.getenv('KUBERNETES_SERVICE_HOST') is not None
+        }
+        return jsonify(response)
+
+    @app.route('/health')
+    def query_health():
+        return jsonify({"status": "healthy"}), 200
 
     @api.route('/v1/tools/lookup', methods=['GET'])
     def lookup_domain():
