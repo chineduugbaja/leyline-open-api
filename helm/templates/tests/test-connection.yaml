@@ -11,5 +11,4 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "leyline-open-api.fullname" . }}:{{ .Values.service.port }}']
-  restartPolicy: Never
+      args: ['{{ include "leyline-open-api.fullname" . }}:{{ .Values.service.port }
